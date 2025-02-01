@@ -2,6 +2,7 @@ import {
   HalfFloatType,
   OrthographicCamera,
   RGBFormat,
+  RGBAFormat,
   Texture,
   TextureLoader,
   UnsignedByteType,
@@ -93,9 +94,9 @@ const resolution = new Vector2(
 const aspect = new Vector2(resolution.x / resolution.y, 1.0);
 
 // RenderTargets initialization.
-const velocityRT = new RenderTarget(resolution, 2, RGBFormat, HalfFloatType);
-const divergenceRT = new RenderTarget(resolution, 1, RGBFormat, HalfFloatType);
-const pressureRT = new RenderTarget(resolution, 2, RGBFormat, HalfFloatType);
+const velocityRT = new RenderTarget(resolution, 2, RGBAFormat, HalfFloatType);
+const divergenceRT = new RenderTarget(resolution, 1, RGBAFormat, HalfFloatType);
+const pressureRT = new RenderTarget(resolution, 2, RGBAFormat, HalfFloatType);
 const colorRT = new RenderTarget(resolution, 2, RGBFormat, UnsignedByteType);
 
 // These variables are used to store the result the result of the different
