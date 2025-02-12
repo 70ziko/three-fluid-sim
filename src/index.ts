@@ -8,7 +8,7 @@ import {
   UnsignedByteType,
   Vector2,
   Vector4,
-  WebGLRenderer
+  WebGLRenderer,
 } from "three";
 import { AdvectionPass } from "./passes/AdvectionPass";
 import { BoundaryPass } from "./passes/BoundaryPass";
@@ -46,11 +46,11 @@ const configuration = {
   Reset: () => {
     velocityAdvectionPass.update({
       inputTexture: velocityInitTexture,
-      velocity: velocityInitTexture
+      velocity: velocityInitTexture,
     });
     colorAdvectionPass.update({
       inputTexture: colorInitTexture,
-      velocity: velocityInitTexture
+      velocity: velocityInitTexture,
     });
     v = undefined;
     c = undefined;
@@ -60,7 +60,7 @@ const configuration = {
   },
   Twitter: () => {
     window.open("https://twitter.com/_amsXYZ");
-  }
+  },
 };
 
 // Html/Three.js initialization.
@@ -172,7 +172,7 @@ canvas.addEventListener("mousedown", (event: MouseEvent) => {
     const y = 1.0 - (event.clientY + window.scrollY) / canvas.clientHeight;
     inputTouches.push({
       id: "mouse",
-      input: new Vector4(x, y, 0, 0)
+      input: new Vector4(x, y, 0, 0),
     });
   }
 });
@@ -198,7 +198,7 @@ canvas.addEventListener("touchstart", (event: TouchEvent) => {
     const y = 1.0 - (touch.clientY + window.scrollY) / canvas.clientHeight;
     inputTouches.push({
       id: touch.identifier,
-      input: new Vector4(x, y, 0, 0)
+      input: new Vector4(x, y, 0, 0),
     });
   }
 });
@@ -206,7 +206,7 @@ canvas.addEventListener("touchstart", (event: TouchEvent) => {
 canvas.addEventListener("touchmove", (event: TouchEvent) => {
   event.preventDefault();
   for (const touch of event.changedTouches) {
-    const registeredTouch = inputTouches.find(value => {
+    const registeredTouch = inputTouches.find((value) => {
       return value.id === touch.identifier;
     });
     if (registeredTouch !== undefined) {
@@ -222,11 +222,11 @@ canvas.addEventListener("touchmove", (event: TouchEvent) => {
 
 canvas.addEventListener("touchend", (event: TouchEvent) => {
   for (const touch of event.changedTouches) {
-    const registeredTouch = inputTouches.find(value => {
+    const registeredTouch = inputTouches.find((value) => {
       return value.id === touch.identifier;
     });
     if (registeredTouch !== undefined) {
-      inputTouches = inputTouches.filter(value => {
+      inputTouches = inputTouches.filter((value) => {
         return value.id !== registeredTouch.id;
       });
     }
@@ -305,13 +305,13 @@ function initGUI() {
     "Color",
     "Velocity",
     "Divergence",
-    "Pressure"
+    "Pressure",
   ]);
   gui.add(configuration, "Mode", [
     "Normal",
     "Luminance",
     "Spectral",
-    "Gradient"
+    "Gradient",
   ]);
 
   const github = gui.add(configuration, "Github");
@@ -342,7 +342,7 @@ function render() {
       touchForceAdditionPass.update({
         touches: inputTouches,
         radius: configuration.Radius,
-        velocity: v
+        velocity: v,
       });
       v = velocityRT.set(renderer);
       renderer.render(touchForceAdditionPass.scene, camera);
@@ -351,7 +351,7 @@ function render() {
         touchColorAdditionPass.update({
           touches: inputTouches,
           radius: configuration.Radius,
-          color: c
+          color: c,
         });
         c = colorRT.set(renderer);
         renderer.render(touchColorAdditionPass.scene, camera);
@@ -368,7 +368,7 @@ function render() {
     // Compute the divergence of the advected velocity vector field.
     velocityDivergencePass.update({
       timeDelta: dt,
-      velocity: v
+      velocity: v,
     });
     d = divergenceRT.set(renderer);
     renderer.render(velocityDivergencePass.scene, camera);
@@ -387,7 +387,7 @@ function render() {
     pressureSubstractionPass.update({
       timeDelta: dt,
       velocity: v,
-      pressure: p
+      pressure: p,
     });
     v = velocityRT.set(renderer);
     renderer.render(pressureSubstractionPass.scene, camera);
@@ -397,7 +397,7 @@ function render() {
       timeDelta: dt,
       inputTexture: c,
       velocity: v,
-      decay: configuration.ColorDecay
+      decay: configuration.ColorDecay,
     });
     c = colorRT.set(renderer);
     renderer.render(colorAdvectionPass.scene, camera);
@@ -405,10 +405,10 @@ function render() {
     // Feed the input of the advection passes with the last advected results.
     velocityAdvectionPass.update({
       inputTexture: v,
-      velocity: v
+      velocity: v,
     });
     colorAdvectionPass.update({
-      inputTexture: c
+      inputTexture: c,
     });
   }
 
@@ -432,7 +432,7 @@ function render() {
   compositionPass.update({
     colorBuffer: visualization,
     mode: configuration.Mode,
-    gradient: gradientTextures[0]
+    gradient: gradientTextures[0],
   });
   renderer.render(compositionPass.scene, camera);
 }
